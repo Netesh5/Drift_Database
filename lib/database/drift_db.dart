@@ -2,12 +2,13 @@ import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
+import 'package:driftdemo/database/services/db_query.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 part 'drift_db.g.dart';
 
-@DriftDatabase(tables: [Employee], daos: [])
+@DriftDatabase(tables: [Employee], daos: [EmployeeDao])
 class MyDatabase extends _$MyDatabase {
   MyDatabase() : super(_openConnectivity());
 

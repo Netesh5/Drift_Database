@@ -11,14 +11,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final EmployeeTableQuery query = EmployeeTableQuery();
+  final EmployeeDao query = EmployeeDao(MyDatabase());
   late TextEditingController nameController;
   late TextEditingController salaryController;
   late TextEditingController specifyEmployeeController;
 
   List<EmployeeData> employeeData = [];
 
-  drift.SimpleSelectStatement<$EmployeeTable, EmployeeData>? specificData;
+  List<EmployeeData> searchData = [];
 
   @override
   void initState() {
@@ -93,9 +93,9 @@ class _HomePageState extends State<HomePage> {
                   decoration: const InputDecoration(hintText: "Find Employee "),
                 ),
                 TextButton(
-                  onPressed: () {
-                    // specificData =
-                    //     query.fetchEmployee(specifyEmployeeController.text);
+                  onPressed: () async {
+                    searchData = await query
+                        .selectEmployee(specifyEmployeeController.text);
                     setState(() {});
                   },
                   child: const Text(
@@ -105,6 +105,9 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 50,
                 ),
+                searchData.isNotEmpty
+                    ? const Text("Item Found")
+                    : const Text("Item not found"),
                 const SizedBox(
                   height: 50,
                 ),
@@ -132,7 +135,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             trailing: IconButton(
                               onPressed: () async {
-                                query.delete(employeeData[index].id);
+                                query.deleteEmployee(employeeData[index].id);
                                 await getData();
                                 setState(() {});
                               },

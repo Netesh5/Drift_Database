@@ -213,6 +213,7 @@ class EmployeeCompanion extends UpdateCompanion<EmployeeData> {
 abstract class _$MyDatabase extends GeneratedDatabase {
   _$MyDatabase(QueryExecutor e) : super(e);
   late final $EmployeeTable employee = $EmployeeTable(this);
+  late final EmployeeDao employeeDao = EmployeeDao(this as MyDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
