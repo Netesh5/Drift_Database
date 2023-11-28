@@ -7,7 +7,7 @@ import 'package:path_provider/path_provider.dart';
 
 part 'drift_db.g.dart';
 
-@DriftDatabase(tables: [Employee])
+@DriftDatabase(tables: [Employee], daos: [])
 class MyDatabase extends _$MyDatabase {
   MyDatabase() : super(_openConnectivity());
 

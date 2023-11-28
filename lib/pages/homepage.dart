@@ -14,13 +14,17 @@ class _HomePageState extends State<HomePage> {
   final EmployeeTableQuery query = EmployeeTableQuery();
   late TextEditingController nameController;
   late TextEditingController salaryController;
+  late TextEditingController specifyEmployeeController;
 
   List<EmployeeData> employeeData = [];
+
+  drift.SimpleSelectStatement<$EmployeeTable, EmployeeData>? specificData;
 
   @override
   void initState() {
     nameController = TextEditingController();
     salaryController = TextEditingController();
+    specifyEmployeeController = TextEditingController();
     super.initState();
   }
 
@@ -28,7 +32,12 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     nameController.dispose();
     salaryController.dispose();
+    specifyEmployeeController.dispose();
     super.dispose();
+  }
+
+  getData() async {
+    employeeData = await query.fetchEmployeeDetail;
   }
 
   @override
@@ -54,7 +63,7 @@ class _HomePageState extends State<HomePage> {
                   decoration: const InputDecoration(hintText: "Enter salary "),
                 ),
                 const SizedBox(
-                  height: 50,
+                  height: 20,
                 ),
                 TextButton(
                   onPressed: () async {
@@ -75,18 +84,40 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 const SizedBox(
+                  height: 20,
+                ),
+
+                // Filter
+                TextFormField(
+                  controller: specifyEmployeeController,
+                  decoration: const InputDecoration(hintText: "Find Employee "),
+                ),
+                TextButton(
+                  onPressed: () {
+                    // specificData =
+                    //     query.fetchEmployee(specifyEmployeeController.text);
+                    setState(() {});
+                  },
+                  child: const Text(
+                    "Find Employee",
+                  ),
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
+                const SizedBox(
                   height: 50,
                 ),
                 TextButton(
                   onPressed: () async {
-                    employeeData = await query.fetchEmployeeDetail;
-
+                    await getData();
                     setState(() {});
                   },
                   child: const Text(
-                    "Fetch data",
+                    "Fetch all data",
                   ),
                 ),
+
                 employeeData.isNotEmpty
                     ? ListView.builder(
                         shrinkWrap: true,
@@ -100,7 +131,11 @@ class _HomePageState extends State<HomePage> {
                               employeeData[index].salary,
                             ),
                             trailing: IconButton(
-                              onPressed: () {},
+                              onPressed: () async {
+                                query.delete(employeeData[index].id);
+                                await getData();
+                                setState(() {});
+                              },
                               icon: const Icon(Icons.delete),
                             ),
                           );
